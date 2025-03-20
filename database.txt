@@ -1,0 +1,13 @@
+CREATE DATABASE portfolio_db;
+USE portfolio_db;
+
+CREATE TABLE projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL
+);
+
+INSERT INTO projects (title, description) VALUES
+('Flutter Chat App', 'A real-time chat app built with Flutter and Firebase.'),
+('E-Commerce App', 'A mobile shopping app developed using Flutter and REST APIs.'),
+('Portfolio API', 'This very portfolio backend built with Node.js and MySQL.');
