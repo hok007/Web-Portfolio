@@ -24,10 +24,11 @@ app.use('/api', restrictAccess);
 
 // MySQL Connection
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'portfolio_db'
+    host: 'mysql-36f2c12-kubota-ec6d.f.aivencloud.com',
+    user: 'avnadmin',
+    password: 'AVNS_aVE01t5pXH6N3wsEipF',
+    database: 'portfolio_db',
+    port: 16372,
 });
 
 db.connect(err => {
