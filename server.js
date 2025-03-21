@@ -30,6 +30,7 @@ const db = mysql.createConnection({
     database: 'portfolio_db'
 });
 
+// Connect to MySQL
 db.connect(err => {
     if (err) throw err;
     console.log('MySQL Connected');
