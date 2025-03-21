@@ -27,8 +27,7 @@ const db = mysql.createConnection({
     host: 'mysql-36f2c12-kubota-ec6d.f.aivencloud.com',
     user: 'avnadmin',
     password: 'AVNS_aVE01t5pXH6N3wsEipF',
-    database: 'portfolio_db',
-    port: 16372,
+    database: 'portfolio_db'
 });
 
 db.connect(err => {
