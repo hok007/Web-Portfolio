@@ -24,16 +24,18 @@ app.use('/api', restrictAccess);
 
 // MySQL Connection
 const db = mysql.createConnection({
-    host: 'mysql-36f2c12-kubota-ec6d.f.aivencloud.com',
-    user: 'avnadmin',
-    password: 'AVNS_aVE01t5pXH6N3wsEipF',
-    database: 'portfolio_db'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
-// Connect to MySQL
-db.connect(err => {
-    if (err) throw err;
-    console.log('MySQL Connected');
+db.connect((err) => {
+    if (err) {
+        console.error('Database connection failed: ' + err.stack);
+        return;
+    }
+    console.log('Connected to database.');
 });
 
 // API Endpoint to Get Projects
