@@ -1,6 +1,8 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const fs = require('fs');
+require('dotenv').config();
 
 const path = require('path');
 const app = express();
@@ -22,20 +24,30 @@ const restrictAccess = (req, res, next) => {
 // Apply to all API routes
 app.use('/api', restrictAccess);
 
-// MySQL Connection
+// Aiven MySQL Connection (translated from database.php)
+const uri = "mysql://avnadmin:AVNS_aVE01t5pXH6N3wsEipF@mysql-36f2c12-kubota-ec6d.f.aivencloud.com:16372/portfolio_db?ssl-mode=REQUIRED";
+
+// Parse the URI manually (mimicking PHP's parse_url)
+const url = new URL(uri.replace('mysql://', 'http://'));
 const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    host: url.hostname,
+    port: url.port,
+    user: url.username,
+    password: url.password,
+    database: url.pathname.slice(1),
+    ssl: {
+        ca: fs.readFileSync('./ca.pem'),
+        rejectUnauthorized: true
+    },
+    connectTimeout: 30000
 });
 
-db.connect((err) => {
+db.connect(err => {
     if (err) {
-        console.error('Database connection failed: ' + err.stack);
+        console.error('Database connection failed:', err.code, err.message);
         return;
     }
-    console.log('Connected to database.');
+    console.log('Connected to Aiven MySQL');
 });
 
 // API Endpoint to Get Projects
