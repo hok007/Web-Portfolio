@@ -6,6 +6,7 @@ async function fetchPersonalInfo() {
         });
         const info = await response.json();
         document.getElementById('personal-name').textContent = `Hi, I'm ${info.name}`;
+        document.getElementById('personal-passionate').textContent = info.passionate || 'A Passionate Developer';
         document.getElementById('personal-email').textContent = `Email: ${info.email}`;
         document.getElementById('personal-phone').textContent = `Phone: ${info.phone || 'Not provided'}`;
         const linkedinLink = document.getElementById('personal-linkedin').querySelector('a');
@@ -53,5 +54,21 @@ async function fetchContactInfo() {
         `;
     } catch (error) {
         console.error('Error fetching contact info:', error);
+    }
+}
+
+// Fetch Skills
+async function fetchSkills() {
+    try {
+        const response = await fetch('http://localhost:3000/api/skills', {
+            headers: { 'Authorization': 'Bearer your-secret-api-key' }
+        });
+        const skills = await response.json();
+        const skillsList = document.getElementById('skills-list');
+        skillsList.innerHTML = skills.map(skill => `
+            <span class="bg-blue-600 text-white px-4 py-2 rounded">${skill.skill_name}</span>
+        `).join('');
+    } catch (error) {
+        console.error('Error fetching skills:', error);
     }
 }

@@ -44,11 +44,21 @@ app.get('/api/projects', (req, res) => {
     });
 });
 
+// API Endpoint to Get Personal Info
 app.get('/api/personal-info', (req, res) => {
     const sql = 'SELECT * FROM personal_info LIMIT 1';
     db.query(sql, (err, results) => {
         if (err) throw err;
         res.json(results[0]);
+    });
+});
+
+// API Endpoint to Get Skills
+app.get('/api/skills', (req, res) => {
+    const sql = 'SELECT * FROM skills';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json(results);
     });
 });
 

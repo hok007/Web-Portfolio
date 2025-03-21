@@ -25,7 +25,7 @@
     <section id="home" class="bg-blue-500 text-white py-20 text-center">
         <div class="container mx-auto">
             <h2 id="personal-name" class="text-4xl font-bold mb-4">Hi, I'm [Loading...]</h2>
-            <p class="text-xl">A Passionate Flutter Developer</p>
+            <p id="personal-passionate" class="text-xl">Loading...</p>
             <div id="personal-details" class="mt-4">
                 <p id="personal-email" class="text-lg">Email: Loading...</p>
                 <p id="personal-phone" class="text-lg">Phone: Loading...</p>
@@ -50,11 +50,8 @@
     <section id="skills" class="bg-gray-200 py-16">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold mb-8">Skills</h2>
-            <div class="flex justify-center space-x-4">
-                <span class="bg-blue-600 text-white px-4 py-2 rounded">Flutter</span>
-                <span class="bg-blue-600 text-white px-4 py-2 rounded">Dart</span>
-                <span class="bg-blue-600 text-white px-4 py-2 rounded">Node.js</span>
-                <span class="bg-blue-600 text-white px-4 py-2 rounded">MySQL</span>
+            <div id="skills-list" class="flex justify-center flex-wrap gap-4">
+                <!-- Skills will be populated via API -->
             </div>
         </div>
     </section>
@@ -74,6 +71,7 @@
         fetchPersonalInfo();
         fetchProjects();
         fetchContactInfo();
+        fetchSkills();
     </script>
 </body>
 </html>

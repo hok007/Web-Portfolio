@@ -15,6 +15,11 @@ CREATE TABLE personal_info (
     linkedin VARCHAR(255)
 );
 
+CREATE TABLE skills (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    skill_name VARCHAR(50) NOT NULL
+);
+
 INSERT INTO projects (title, description) VALUES
 ('Flutter Chat App', 'A real-time chat app built with Flutter and Firebase.'),
 ('E-Commerce App', 'A mobile shopping app developed using Flutter and REST APIs.'),
@@ -22,3 +27,17 @@ INSERT INTO projects (title, description) VALUES
 
 INSERT INTO personal_info (name, email, phone, linkedin) VALUES
 ('Your Real Name', 'your.real.email@example.com', '+1-Your-Phone-Number', 'https://linkedin.com/in/yourrealprofile');
+
+INSERT INTO skills (skill_name) VALUES
+('Flutter'),
+('Dart'),
+('Node.js'),
+('MySQL'),
+('Tailwind CSS'),
+('RESTful APIs');
+
+ALTER TABLE personal_info ADD passionate VARCHAR(100);
+
+UPDATE personal_info 
+SET passionate = 'A Passionate Flutter Developer'
+WHERE id = 1;
