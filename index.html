@@ -9,14 +9,14 @@
 </head>
 <body class="bg-gray-100 font-sans">
     <!-- Navbar -->
-    <nav class="bg-blue-600 p-4 text-white">
+    <nav class="bg-blue-500 p-4 text-white fixed top-0 left-0 w-full z-10">
         <div class="container mx-auto flex justify-between">
-            <a href="/" class="text-2xl font-bold cursor-pointer">Flutter Dev Portfolio</a>
+            <a href="#" data-scroll-to="home" class="text-2xl font-bold cursor-pointer">Flutter Dev Portfolio</a>
             <ul class="flex space-x-6">
-                <li><a href="#home" class="hover:underline">Home</a></li>
-                <li><a href="#projects" class="hover:underline">Projects</a></li>
-                <li><a href="#skills" class="hover:underline">Skills</a></li>
-                <li><a href="#contact" class="hover:underline">Contact</a></li>
+                <li><a href="#" data-scroll-to="home" class="hover:underline nav-link">Home</a></li>
+                <li><a href="#" data-scroll-to="projects" class="hover:underline nav-link">Projects</a></li>
+                <li><a href="#" data-scroll-to="skills" class="hover:underline nav-link">Skills</a></li>
+                <li><a href="#" data-scroll-to="contact" class="hover:underline nav-link">Contact</a></li>
             </ul>
         </div>
     </nav>
@@ -65,13 +65,5 @@
             </div>
         </div>
     </section>
-
-    <!-- JavaScript to Fetch Data -->
-    <script>
-        fetchPersonalInfo();
-        fetchProjects();
-        fetchContactInfo();
-        fetchSkills();
-    </script>
 </body>
 </html>

@@ -1,3 +1,25 @@
+// Highlight Active Section on Scroll
+function highlightActiveSection() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    let currentSection = '';
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+            currentSection = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('underline');
+        if (link.getAttribute('data-scroll-to') === currentSection) {
+            link.classList.add('underline');
+        }
+    });
+}
+
 // Fetch Personal Info
 async function fetchPersonalInfo() {
     try {
@@ -74,3 +96,22 @@ async function fetchSkills() {
         console.error('Error fetching skills:', error);
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-scroll-to]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const sectionId = link.getAttribute('data-scroll-to');
+            const section = document.getElementById(sectionId);
+            section.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    fetchPersonalInfo();
+    fetchProjects();
+    fetchContactInfo();
+    fetchSkills();
+
+    window.addEventListener('scroll', highlightActiveSection);
+    highlightActiveSection();
+});
