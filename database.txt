@@ -7,7 +7,18 @@ CREATE TABLE projects (
     description TEXT NOT NULL
 );
 
+CREATE TABLE personal_info (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    linkedin VARCHAR(255)
+);
+
 INSERT INTO projects (title, description) VALUES
 ('Flutter Chat App', 'A real-time chat app built with Flutter and Firebase.'),
 ('E-Commerce App', 'A mobile shopping app developed using Flutter and REST APIs.'),
 ('Portfolio API', 'This very portfolio backend built with Node.js and MySQL.');
+
+INSERT INTO personal_info (name, email, phone, linkedin) VALUES
+('Your Real Name', 'your.real.email@example.com', '+1-Your-Phone-Number', 'https://linkedin.com/in/yourrealprofile');
