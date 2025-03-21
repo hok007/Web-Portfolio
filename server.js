@@ -2,9 +2,9 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
-const path = require('path');
 const app = express();
 
 app.use(cors());
@@ -12,7 +12,7 @@ app.use(express.static(__dirname));
 app.use(express.json());
 
 // Middleware to check API key
-const apiKey = 'your-secret-api-key'; // Replace with a strong, unique key
+const apiKey = 'your-secret-api-key'; // Replace with your actual key
 const restrictAccess = (req, res, next) => {
     const providedKey = req.headers['authorization'];
     if (!providedKey || providedKey !== `Bearer ${apiKey}`) {
@@ -21,13 +21,8 @@ const restrictAccess = (req, res, next) => {
     next();
 };
 
-// Apply to all API routes
-app.use('/api', restrictAccess);
-
-// Aiven MySQL Connection (translated from database.php)
+// Aiven MySQL Connection
 const uri = "mysql://avnadmin:AVNS_aVE01t5pXH6N3wsEipF@mysql-36f2c12-kubota-ec6d.f.aivencloud.com:16372/portfolio_db?ssl-mode=REQUIRED";
-
-// Parse the URI manually (mimicking PHP's parse_url)
 const url = new URL(uri.replace('mysql://', 'http://'));
 const db = mysql.createConnection({
     host: url.hostname,
@@ -50,31 +45,32 @@ db.connect(err => {
     console.log('Connected to Aiven MySQL');
 });
 
-// API Endpoint to Get Projects
+// API Routes (moved before catch-all)
+app.use('/api', restrictAccess); // Apply middleware to /api routes
 app.get('/api/projects', (req, res) => {
-    const sql = 'SELECT * FROM projects';
-    db.query(sql, (err, results) => {
+    db.query('SELECT * FROM projects', (err, results) => {
         if (err) throw err;
         res.json(results);
     });
 });
 
-// API Endpoint to Get Personal Info
 app.get('/api/personal-info', (req, res) => {
-    const sql = 'SELECT * FROM personal_info LIMIT 1';
-    db.query(sql, (err, results) => {
+    db.query('SELECT * FROM personal_info LIMIT 1', (err, results) => {
         if (err) throw err;
         res.json(results[0]);
     });
 });
 
-// API Endpoint to Get Skills
 app.get('/api/skills', (req, res) => {
-    const sql = 'SELECT * FROM skills';
-    db.query(sql, (err, results) => {
+    db.query('SELECT * FROM skills', (err, results) => {
         if (err) throw err;
         res.json(results);
     });
+});
+
+// Static Routes (after API routes)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/:page', (req, res) => {
@@ -86,12 +82,8 @@ app.get('/:page', (req, res) => {
     });
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 // Start Server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Use env.PORT for Render compatibility
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

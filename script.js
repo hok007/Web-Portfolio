@@ -1,3 +1,5 @@
+const apiKey = 'your-secret-api-key';
+
 // Highlight Active Section on Scroll
 function highlightActiveSection() {
     const sections = document.querySelectorAll('section[id]');
@@ -23,8 +25,8 @@ function highlightActiveSection() {
 // Fetch Personal Info
 async function fetchPersonalInfo() {
     try {
-        const response = await fetch('https://portfolio-api.onrender.com/api/personal-info', {
-            headers: { 'Authorization': 'Bearer your-secret-api-key' }
+        const response = await fetch('http://localhost:3000/api/personal-info', {
+            headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         const info = await response.json();
         document.getElementById('personal-name').textContent = `Hi, I'm ${info.name}`;
@@ -44,8 +46,8 @@ async function fetchPersonalInfo() {
 // Fetch Projects
 async function fetchProjects() {
     try {
-        const response = await fetch('https://portfolio-api.onrender.com/api/projects', {
-            headers: { 'Authorization': 'Bearer your-secret-api-key' }
+        const response = await fetch('http://localhost:3000/api/projects', {
+            headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         const projects = await response.json();
         const projectList = document.getElementById('project-list');
@@ -67,8 +69,8 @@ async function fetchProjects() {
 // Fetch Contact Info
 async function fetchContactInfo() {
     try {
-        const response = await fetch('https://portfolio-api.onrender.com/api/personal-info', {
-            headers: { 'Authorization': 'Bearer your-secret-api-key' }
+        const response = await fetch('http://localhost:3000/api/personal-info', {
+            headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         const data = await response.json();
         const contactInfoDiv = document.getElementById('contact-info');
@@ -84,8 +86,8 @@ async function fetchContactInfo() {
 // Fetch Skills
 async function fetchSkills() {
     try {
-        const response = await fetch('https://portfolio-api.onrender.com/api/skills', {
-            headers: { 'Authorization': 'Bearer your-secret-api-key' }
+        const response = await fetch('http://localhost:3000/api/skills', {
+            headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         const skills = await response.json();
         const skillsList = document.getElementById('skills-list');
