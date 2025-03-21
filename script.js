@@ -25,7 +25,7 @@ function highlightActiveSection() {
 // Fetch Personal Info
 async function fetchPersonalInfo() {
     try {
-        const response = await fetch('http://localhost:3000/api/personal-info', {
+        const response = await fetch('../api/personal-info', {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         const info = await response.json();
@@ -46,7 +46,7 @@ async function fetchPersonalInfo() {
 // Fetch Projects
 async function fetchProjects() {
     try {
-        const response = await fetch('http://localhost:3000/api/projects', {
+        const response = await fetch('../api/projects', {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         const projects = await response.json();
@@ -69,7 +69,7 @@ async function fetchProjects() {
 // Fetch Contact Info
 async function fetchContactInfo() {
     try {
-        const response = await fetch('http://localhost:3000/api/personal-info', {
+        const response = await fetch('../api/personal-info', {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         const data = await response.json();
@@ -86,7 +86,7 @@ async function fetchContactInfo() {
 // Fetch Skills
 async function fetchSkills() {
     try {
-        const response = await fetch('http://localhost:3000/api/skills', {
+        const response = await fetch('../api/skills', {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         const skills = await response.json();
