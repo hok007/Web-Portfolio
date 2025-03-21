@@ -2,15 +2,31 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 
+const path = require('path');
 const app = express();
+
 app.use(cors());
+app.use(express.static(__dirname));
 app.use(express.json());
+
+// Middleware to check API key
+const apiKey = 'your-secret-api-key'; // Replace with a strong, unique key
+const restrictAccess = (req, res, next) => {
+    const providedKey = req.headers['authorization'];
+    if (!providedKey || providedKey !== `Bearer ${apiKey}`) {
+        return res.status(403).json({ error: 'Unauthorized: Invalid API key' });
+    }
+    next();
+};
+
+// Apply to all API routes
+app.use('/api', restrictAccess);
 
 // MySQL Connection
 const db = mysql.createConnection({
     host: 'localhost',
-    user: 'root', // Replace with your MySQL username
-    password: 'yourpassword', // Replace with your MySQL password
+    user: 'root',
+    password: '',
     database: 'portfolio_db'
 });
 
@@ -28,8 +44,29 @@ app.get('/api/projects', (req, res) => {
     });
 });
 
+app.get('/api/personal-info', (req, res) => {
+    const sql = 'SELECT * FROM personal_info LIMIT 1';
+    db.query(sql, (err, results) => {
+        if (err) throw err;
+        res.json(results[0]);
+    });
+});
+
+app.get('/:page', (req, res) => {
+    const page = req.params.page;
+    res.sendFile(path.join(__dirname, `${page}.html`), (err) => {
+        if (err) {
+            res.status(404).send('Page not found');
+        }
+    });
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // Start Server
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
