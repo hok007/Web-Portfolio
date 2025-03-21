@@ -12,6 +12,8 @@ async function fetchPersonalInfo() {
         const linkedinLink = document.getElementById('personal-linkedin').querySelector('a');
         linkedinLink.href = info.linkedin || '#';
         linkedinLink.textContent = `LinkedIn: ${info.linkedin || 'Not provided'}`;
+        linkedinLink.target = '_blank';
+        linkedinLink.rel = 'noopener noreferrer';
     } catch (error) {
         console.error('Error fetching personal info:', error);
     }
@@ -50,7 +52,7 @@ async function fetchContactInfo() {
         const contactInfoDiv = document.getElementById('contact-info');
         contactInfoDiv.innerHTML = `
             <p>Email: ${data.email}</p>
-            <p>LinkedIn: <a href="${data.linkedin}" class="underline hover:text-blue-600">${data.linkedin}</a></p>
+            <p>LinkedIn: <a href="${data.linkedin}" class="underline hover:text-blue-600" target="_blank" rel="noopener noreferrer">${data.linkedin}</a></p>
         `;
     } catch (error) {
         console.error('Error fetching contact info:', error);
