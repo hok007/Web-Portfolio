@@ -23,7 +23,7 @@ function highlightActiveSection() {
 // Fetch Personal Info
 async function fetchPersonalInfo() {
     try {
-        const response = await fetch('http://localhost:3000/api/personal-info', {
+        const response = await fetch('https://portfolio-api.onrender.com/api/personal-info', {
             headers: { 'Authorization': 'Bearer your-secret-api-key' }
         });
         const info = await response.json();
@@ -44,7 +44,7 @@ async function fetchPersonalInfo() {
 // Fetch Projects
 async function fetchProjects() {
     try {
-        const response = await fetch('http://localhost:3000/api/projects', {
+        const response = await fetch('https://portfolio-api.onrender.com/api/projects', {
             headers: { 'Authorization': 'Bearer your-secret-api-key' }
         });
         const projects = await response.json();
@@ -67,7 +67,7 @@ async function fetchProjects() {
 // Fetch Contact Info
 async function fetchContactInfo() {
     try {
-        const response = await fetch('http://localhost:3000/api/personal-info', {
+        const response = await fetch('https://portfolio-api.onrender.com/api/personal-info', {
             headers: { 'Authorization': 'Bearer your-secret-api-key' }
         });
         const data = await response.json();
@@ -84,7 +84,7 @@ async function fetchContactInfo() {
 // Fetch Skills
 async function fetchSkills() {
     try {
-        const response = await fetch('http://localhost:3000/api/skills', {
+        const response = await fetch('https://portfolio-api.onrender.com/api/skills', {
             headers: { 'Authorization': 'Bearer your-secret-api-key' }
         });
         const skills = await response.json();
