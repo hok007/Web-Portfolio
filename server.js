@@ -5,7 +5,18 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-app.use(cors());
+
+// CORS configuration
+app.use(cors({
+    origin: 'https://oeungchheanghok.netlify.app', // Allow your Netlify domain
+    methods: ['GET', 'POST', 'OPTIONS'], // Allow these methods
+    allowedHeaders: ['Authorization', 'Content-Type'], // Allow these headers
+    credentials: false // If no cookies/auth needed
+}));
+
+// Handle preflight OPTIONS requests
+app.options('*', cors()); // Respond to all OPTIONS requests
+
 app.use(express.json());
 
 // Log requests
