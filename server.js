@@ -3,16 +3,19 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
 
 const app = express();
-
 app.use(cors());
-app.use(express.static(__dirname));
 app.use(express.json());
 
-// Middleware to check API key
-const apiKey = 'your-secret-api-key'; // Replace with your actual key
+// Log requests
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+// API Key Middleware
+const apiKey = 'your-secret-api-key'; // Must match frontend
 const restrictAccess = (req, res, next) => {
     const providedKey = req.headers['authorization'];
     if (!providedKey || providedKey !== `Bearer ${apiKey}`) {
@@ -22,68 +25,79 @@ const restrictAccess = (req, res, next) => {
 };
 
 // Aiven MySQL Connection
-const uri = "mysql://avnadmin:AVNS_aVE01t5pXH6N3wsEipF@mysql-36f2c12-kubota-ec6d.f.aivencloud.com:16372/portfolio_db?ssl-mode=REQUIRED";
-const url = new URL(uri.replace('mysql://', 'http://'));
-const db = mysql.createConnection({
-    host: url.hostname,
-    port: url.port,
-    user: url.username,
-    password: url.password,
-    database: url.pathname.slice(1),
-    ssl: {
-        ca: fs.readFileSync('./ca.pem'),
-        rejectUnauthorized: true
-    },
-    connectTimeout: 30000
-});
-
-db.connect(err => {
-    if (err) {
-        console.error('Database connection failed:', err.code, err.message);
-        return;
-    }
-    console.log('Connected to Aiven MySQL');
-});
-
-// API Routes (moved before catch-all)
-app.use('/api', restrictAccess); // Apply middleware to /api routes
-app.get('/api/projects', (req, res) => {
-    db.query('SELECT * FROM projects', (err, results) => {
-        if (err) throw err;
-        res.json(results);
+try {
+    const uri = "mysql://avnadmin:AVNS_aVE01t5pXH6N3wsEipF@mysql-36f2c12-kubota-ec6d.f.aivencloud.com:16372/portfolio_db?ssl-mode=REQUIRED";
+    const url = new URL(uri.replace('mysql://', 'http://'));
+    const db = mysql.createConnection({
+        host: url.hostname,
+        port: url.port,
+        user: url.username,
+        password: url.password,
+        database: url.pathname.slice(1),
+        ssl: {
+            ca: fs.readFileSync('./ca.pem'),
+            rejectUnauthorized: true
+        },
+        connectTimeout: 30000
     });
-});
 
-app.get('/api/personal-info', (req, res) => {
-    db.query('SELECT * FROM personal_info LIMIT 1', (err, results) => {
-        if (err) throw err;
-        res.json(results[0]);
-    });
-});
-
-app.get('/api/skills', (req, res) => {
-    db.query('SELECT * FROM skills', (err, results) => {
-        if (err) throw err;
-        res.json(results);
-    });
-});
-
-// Static Routes (after API routes)
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.get('/:page', (req, res) => {
-    const page = req.params.page;
-    res.sendFile(path.join(__dirname, `${page}.html`), (err) => {
+    db.connect(err => {
         if (err) {
-            res.status(404).send('Page not found');
+            console.error('Database connection failed:', err.code, err.message);
+            return;
         }
+        console.log('Connected to Aiven MySQL');
     });
-});
 
-// Start Server
-const PORT = process.env.PORT || 3000; // Use env.PORT for Render compatibility
+    // API Routes
+    app.use('/api', restrictAccess);
+    app.get('/api/personal-info', (req, res) => {
+        console.log('Handling /api/personal-info');
+        db.query('SELECT * FROM personal_info LIMIT 1', (err, results) => {
+            if (err) {
+                console.error('Query error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+            res.json(results[0]);
+        });
+    });
+
+    app.get('/api/projects', (req, res) => {
+        console.log('Handling /api/projects');
+        db.query('SELECT * FROM projects', (err, results) => {
+            if (err) {
+                console.error('Query error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+            res.json(results);
+        });
+    });
+
+    app.get('/api/skills', (req, res) => {
+        console.log('Handling /api/skills');
+        db.query('SELECT * FROM skills', (err, results) => {
+            if (err) {
+                console.error('Query error:', err);
+                return res.status(500).json({ error: 'Database error' });
+            }
+            res.json(results);
+        });
+    });
+
+    // Root Route (for testing)
+    app.get('/', (req, res) => {
+        res.send('API is running');
+    });
+
+    // Catch-all
+    app.get('*', (req, res) => {
+        res.status(404).json({ error: 'Route not found' });
+    });
+} catch (err) {
+    console.error('Startup error:', err.message);
+}
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

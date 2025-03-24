@@ -1,4 +1,4 @@
-const apiKey = 'your-secret-api-key';
+const apiKey = 'your-secret-api-key'; // Match server.js
 
 // Highlight Active Section on Scroll
 function highlightActiveSection() {
@@ -25,9 +25,10 @@ function highlightActiveSection() {
 // Fetch Personal Info
 async function fetchPersonalInfo() {
     try {
-        const response = await fetch('../api/personal-info', {
+        const response = await fetch('https://portfolio-api.onrender.com/api/personal-info', {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const info = await response.json();
         document.getElementById('personal-name').textContent = `Hi, I'm ${info.name}`;
         document.getElementById('personal-passionate').textContent = info.passionate || 'A Passionate Developer';
@@ -46,9 +47,10 @@ async function fetchPersonalInfo() {
 // Fetch Projects
 async function fetchProjects() {
     try {
-        const response = await fetch('../api/projects', {
+        const response = await fetch('https://portfolio-api.onrender.com/api/projects', {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const projects = await response.json();
         const projectList = document.getElementById('project-list');
         projectList.innerHTML = projects.map(project => `
@@ -69,9 +71,10 @@ async function fetchProjects() {
 // Fetch Contact Info
 async function fetchContactInfo() {
     try {
-        const response = await fetch('../api/personal-info', {
+        const response = await fetch('https://portfolio-api.onrender.com/api/personal-info', {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
         const contactInfoDiv = document.getElementById('contact-info');
         contactInfoDiv.innerHTML = `
@@ -86,9 +89,10 @@ async function fetchContactInfo() {
 // Fetch Skills
 async function fetchSkills() {
     try {
-        const response = await fetch('../api/skills', {
+        const response = await fetch('https://portfolio-api.onrender.com/api/skills', {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const skills = await response.json();
         const skillsList = document.getElementById('skills-list');
         skillsList.innerHTML = skills.map(skill => `
