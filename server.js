@@ -2,20 +2,16 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const fs = require('fs');
-const path = require('path');
 
 const app = express();
 
 // CORS configuration
 app.use(cors({
-    origin: 'https://oeungchheanghok.netlify.app', // Allow your Netlify domain
-    methods: ['GET', 'POST', 'OPTIONS'], // Allow these methods
-    allowedHeaders: ['Authorization', 'Content-Type'], // Allow these headers
-    credentials: false // If no cookies/auth needed
+    origin: 'https://oeungchheanghok.netlify.app', // Your Netlify domain
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Authorization', 'Content-Type']
 }));
-
-// Handle preflight OPTIONS requests
-app.options('*', cors()); // Respond to all OPTIONS requests
+app.options('*', cors()); // Handle preflight requests
 
 app.use(express.json());
 
@@ -26,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 // API Key Middleware
-const apiKey = 'your-secret-api-key'; // Must match frontend
+const apiKey = 'your-secret-api-key'; // Match frontend
 const restrictAccess = (req, res, next) => {
     const providedKey = req.headers['authorization'];
     if (!providedKey || providedKey !== `Bearer ${apiKey}`) {
@@ -37,6 +33,13 @@ const restrictAccess = (req, res, next) => {
 
 // Aiven MySQL Connection
 try {
+    console.log('Starting Aiven connection...');
+    if (!fs.existsSync('./ca.pem')) {
+        console.error('Error: ca.pem not found');
+    } else {
+        console.log('ca.pem found');
+    }
+
     const uri = "mysql://avnadmin:AVNS_aVE01t5pXH6N3wsEipF@mysql-36f2c12-kubota-ec6d.f.aivencloud.com:16372/portfolio_db?ssl-mode=REQUIRED";
     const url = new URL(uri.replace('mysql://', 'http://'));
     const db = mysql.createConnection({
@@ -69,7 +72,7 @@ try {
                 console.error('Query error:', err);
                 return res.status(500).json({ error: 'Database error' });
             }
-            res.json(results[0]);
+            res.json(results[0] || { error: 'No data found' });
         });
     });
 
@@ -95,13 +98,15 @@ try {
         });
     });
 
-    // Root Route (for testing)
+    // Root Route
     app.get('/', (req, res) => {
+        console.log('Handling /');
         res.send('API is running');
     });
 
     // Catch-all
     app.get('*', (req, res) => {
+        console.log('Catch-all route triggered');
         res.status(404).json({ error: 'Route not found' });
     });
 } catch (err) {
