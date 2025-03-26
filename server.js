@@ -1,28 +1,20 @@
 const express = require('express');
-const mysql = require('mysql2');
+const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
-const fs = require('fs');
 
 const app = express();
 
-// CORS configuration
-app.use(cors({
-    origin: 'https://oeungchheanghok.netlify.app', // Your Netlify domain
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Authorization', 'Content-Type']
-}));
-app.options('*', cors()); // Handle preflight requests
+app.use(cors());
+app.options('*', cors());
 
 app.use(express.json());
 
-// Log requests
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
     next();
 });
 
-// API Key Middleware
-const apiKey = 'your-secret-api-key'; // Match frontend
+const apiKey = 'your-secret-api-key';
 const restrictAccess = (req, res, next) => {
     const providedKey = req.headers['authorization'];
     if (!providedKey || providedKey !== `Bearer ${apiKey}`) {
@@ -31,89 +23,76 @@ const restrictAccess = (req, res, next) => {
     next();
 };
 
-// Aiven MySQL Connection
+const supabaseUrl = 'https://plebqhbnlzuvzphkiwzv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZWJxaGJubHp1dnpwaGtpd3p2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5NzE4MzgsImV4cCI6MjA1ODU0NzgzOH0.MsOy2cTqPSCAMBAcm0qrkcngPeHW-PmTQE_gsIcpPpY';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 try {
-    console.log('Starting Aiven connection...');
-    if (!fs.existsSync('./ca.pem')) {
-        console.error('Error: ca.pem not found');
-    } else {
-        console.log('ca.pem found');
-    }
+    console.log('Starting connection to Supabase...');
 
-    const uri = "mysql://avnadmin:AVNS_aVE01t5pXH6N3wsEipF@mysql-36f2c12-kubota-ec6d.f.aivencloud.com:16372/portfolio_db?ssl-mode=REQUIRED";
-    const url = new URL(uri.replace('mysql://', 'http://'));
-    const db = mysql.createConnection({
-        host: url.hostname,
-        port: url.port,
-        user: url.username,
-        password: url.password,
-        database: url.pathname.slice(1),
-        ssl: {
-            ca: fs.readFileSync('./ca.pem'),
-            rejectUnauthorized: true
-        },
-        connectTimeout: 30000
-    });
+    // Test Supabase connection (optional)
+    supabase.from('personal_info').select('*').limit(1)
+        .then(() => console.log('Connected to Supabase'))
+        .catch(err => console.error('Supabase connection failed:', err.message));
 
-    db.connect(err => {
-        if (err) {
-            console.error('Database connection failed:', err.code, err.message);
-            return;
-        }
-        console.log('Connected to Aiven MySQL');
-    });
-
-    // API Routes
     app.use('/api', restrictAccess);
-    app.get('/api/personal-info', (req, res) => {
-        console.log('Handling /api/personal-info');
-        db.query('SELECT * FROM personal_info LIMIT 1', (err, results) => {
-            if (err) {
-                console.error('Query error:', err);
-                return res.status(500).json({ error: 'Database error' });
-            }
-            res.json(results[0] || { error: 'No data found' });
-        });
+
+    // GET /api/personal-info
+    app.get('/api/personal-info', async (req, res) => {
+        try {
+            const { data, error } = await supabase
+                .from('personal_info')
+                .select('*')
+                .limit(1)
+                .single();
+            if (error) throw error;
+            res.json(data || { error: 'No data found' });
+        } catch (err) {
+            console.error('Query error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+        }
     });
 
-    app.get('/api/projects', (req, res) => {
-        console.log('Handling /api/projects');
-        db.query('SELECT * FROM projects', (err, results) => {
-            if (err) {
-                console.error('Query error:', err);
-                return res.status(500).json({ error: 'Database error' });
-            }
-            res.json(results);
-        });
+    // GET /api/projects
+    app.get('/api/projects', async (req, res) => {
+        try {
+            const { data, error } = await supabase
+                .from('projects')
+                .select('*');
+            if (error) throw error;
+            res.json(data);
+        } catch (err) {
+            console.error('Query error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+        }
     });
 
-    app.get('/api/skills', (req, res) => {
-        console.log('Handling /api/skills');
-        db.query('SELECT * FROM skills', (err, results) => {
-            if (err) {
-                console.error('Query error:', err);
-                return res.status(500).json({ error: 'Database error' });
-            }
-            res.json(results);
-        });
+    // GET /api/skills
+    app.get('/api/skills', async (req, res) => {
+        try {
+            const { data, error } = await supabase
+                .from('skills')
+                .select('*');
+            if (error) throw error;
+            res.json(data);
+        } catch (err) {
+            console.error('Query error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+        }
     });
 
-    // Root Route
     app.get('/', (req, res) => {
-        console.log('Handling /');
-        res.send('API is running');
+        res.status(404).json({ error: 'Route not found' });
     });
 
-    // Catch-all
     app.get('*', (req, res) => {
-        console.log('Catch-all route triggered');
         res.status(404).json({ error: 'Route not found' });
     });
 } catch (err) {
     console.error('Startup error:', err.message);
 }
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port http://localhost:${PORT}`);
 });
