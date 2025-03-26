@@ -10,9 +10,9 @@
 <body class="bg-gray-100 font-sans">
     <!-- Navbar -->
     <nav class="bg-blue-500 p-4 text-white fixed top-0 left-0 w-full z-10">
-        <div class="container mx-auto flex justify-between">
+        <div class="container mx-0 sm:flex justify-between items-center">
             <a href="#" data-scroll-to="home" class="text-2xl font-bold cursor-pointer">Flutter Dev Portfolio</a>
-            <ul class="flex space-x-6">
+            <ul class="flex space-x-6 mt-4 sm:mt-0">
                 <li><a href="#" data-scroll-to="home" class="hover:underline nav-link">Home</a></li>
                 <li><a href="#" data-scroll-to="projects" class="hover:underline nav-link">Projects</a></li>
                 <li><a href="#" data-scroll-to="skills" class="hover:underline nav-link">Skills</a></li>
@@ -22,14 +22,14 @@
     </nav>
 
     <!-- Hero Section with Personal Info -->
-    <section id="home" class="bg-blue-500 text-white py-20 text-center">
-        <div class="container mx-auto">
-            <h2 id="personal-name" class="text-4xl font-bold mb-4">Hi, I'm [Loading...]</h2>
-            <p id="personal-passionate" class="text-xl">Loading...</p>
+    <section id="home" class="bg-blue-500 text-white pt-20 pb-10 text-center">
+        <div class="container mx-auto px-4 mt-8 sm:mt-0">
+            <h2 id="personal-name" class="text-3xl font-bold mb-4 sm:text-4xl">Hi, I'm [Loading...]</h2>
+            <p id="personal-passionate" class="text-xl sm:text-xl">Loading...</p>
             <div id="personal-details" class="mt-4">
-                <p id="personal-email" class="text-lg">Email: Loading...</p>
-                <p id="personal-phone" class="text-lg">Phone: Loading...</p>
-                <p id="personal-linkedin" class="text-lg">
+                <p id="personal-email" class="text-base sm:text-lg">Email: Loading...</p>
+                <p id="personal-phone" class="text-base sm:text-lg">Phone: Loading...</p>
+                <p id="personal-linkedin" class="text-base sm:text-lg">
                     <a href="#" class="underline hover:text-gray-200">LinkedIn: Loading...</a>
                 </p>
             </div>
@@ -50,7 +50,7 @@
     <section id="skills" class="bg-gray-200 py-16">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold mb-8">Skills</h2>
-            <div id="skills-list" class="flex justify-center flex-wrap gap-4">
+            <div id="skills-list" class="flex justify-center flex-wrap gap-4 mx-8 sm:mx-0">
                 <!-- Skills will be populated via API -->
             </div>
         </div>
@@ -60,7 +60,7 @@
     <section id="contact" class="py-16">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold mb-8">Get in Touch</h2>
-            <div id="contact-info">
+            <div id="contact-info text-base sm:text-lg">
                 <!-- Contact info will be populated via SQL data -->
             </div>
         </div>
