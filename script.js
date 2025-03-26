@@ -1,4 +1,5 @@
-const apiKey = 'your-secret-api-key'; // Match server.js
+const backendUrl = 'https://web-portfolio-d0hy.onrender.com';
+const apiKey = 'secret-chheanghok-key';
 
 // Highlight Active Section on Scroll
 function highlightActiveSection() {
@@ -25,7 +26,7 @@ function highlightActiveSection() {
 // Fetch Personal Info
 async function fetchPersonalInfo() {
     try {
-        const response = await fetch('http://localhost:3000/api/personal-info', {
+        const response = await fetch(`${backendUrl}/api/personal-info`, {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -47,7 +48,7 @@ async function fetchPersonalInfo() {
 // Fetch Projects
 async function fetchProjects() {
     try {
-        const response = await fetch('http://localhost:3000/api/projects', {
+        const response = await fetch(`${backendUrl}/api/projects`, {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -71,7 +72,7 @@ async function fetchProjects() {
 // Fetch Contact Info
 async function fetchContactInfo() {
     try {
-        const response = await fetch('http://localhost:3000/api/personal-info', {
+        const response = await fetch(`${backendUrl}/api/personal-info`, {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -89,7 +90,7 @@ async function fetchContactInfo() {
 // Fetch Skills
 async function fetchSkills() {
     try {
-        const response = await fetch('http://localhost:3000/api/skills', {
+        const response = await fetch(`${backendUrl}/api/skills`, {
             headers: { 'Authorization': `Bearer ${apiKey}` }
         });
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
