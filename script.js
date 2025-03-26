@@ -79,7 +79,7 @@ async function fetchContactInfo() {
         const data = await response.json();
         const contactInfoDiv = document.getElementById('contact-info');
         contactInfoDiv.innerHTML = `
-            <p>Email: ${data.email}</p>
+            <p class="mb-4 sm:mb-0">Email: ${data.email}</p>
             <p>LinkedIn: <a href="${data.linkedin}" class="underline hover:text-blue-600" target="_blank" rel="noopener noreferrer">${data.linkedin}</a></p>
         `;
     } catch (error) {
