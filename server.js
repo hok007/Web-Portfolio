@@ -1,6 +1,7 @@
 const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.use((req, res, next) => {
     next();
 });
 
-const apiKey = 'your-secret-api-key';
+const apiKey = process.env.API_KEY;
 const restrictAccess = (req, res, next) => {
     const providedKey = req.headers['authorization'];
     if (!providedKey || providedKey !== `Bearer ${apiKey}`) {
@@ -23,8 +24,8 @@ const restrictAccess = (req, res, next) => {
     next();
 };
 
-const supabaseUrl = 'https://plebqhbnlzuvzphkiwzv.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsZWJxaGJubHp1dnpwaGtpd3p2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI5NzE4MzgsImV4cCI6MjA1ODU0NzgzOH0.MsOy2cTqPSCAMBAcm0qrkcngPeHW-PmTQE_gsIcpPpY';
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 try {
@@ -92,7 +93,7 @@ try {
     console.error('Startup error:', err.message);
 }
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server running on port http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
